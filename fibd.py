@@ -10,7 +10,7 @@ from sys import argv
 
 def fibonacci(n, m):
     """
-    Returns a fibonacci sequence for range of n with k number of offspring!!!!!!!!!!!!!!
+    Returns an int with the number of rabbits after n months.
 
     Keyword arguments:
     n: a number to define the range of the sequence
@@ -24,40 +24,48 @@ def fibonacci(n, m):
     n = int(n)
     m = int(m)
 
-
+    # Loop throught the given time range
     for number in range(n):
-        for rabbit in rabbits:
+        # Make an empty list for new babies
+        babies = []
+        # Enumerate through the currently alive rabbits
+        for ind, rabbit in enumerate(rabbits):
+            # If the rabbit is one years old, it will not have offspring
             if rabbit == 1:
                 # Make the rabbit older
-                print(rabbit)
+                rabbits[ind] = rabbit + 1
+            # If the rabbit is between 1 and m, it will have offspring and live
             elif rabbit > 1 and rabbit < m:
                 # Make the rabbit older
+                rabbits[ind] = rabbit + 1
                 # Add a new baby
-                rabbits.append(1)
+                babies.append(1)
+            # If the rabbit is old, it will have offspring and die
             elif rabbit == m:
                 # Remove the rabbit
+                rabbits.pop(ind)
                 # Add a new baby
-                rabbits.append(1)
+                babies.append(1)
+        # Add the new rabbits
+        rabbits = rabbits + babies
 
-    print(len(rabbits))
+    # Returns the number of rabbits that are alive after n months
     return len(rabbits)
 
 def main():
     """This code will be executed when called from the command line
     """
-#step 1: assign input to variables
+# Step 1: assign input to variables
     with open(argv[1]) as f:
         for line in f:
             items = line.split()
             n = items[0]
-            print(n)
             m = items[1]
-            print(m)
             
-#step 2: make a fibonacci sequence using the variables
+# Step 2: make a fibonacci sequence using the variables
     fib_list = fibonacci(n, m)
     
-#step 3: print the last occurrence in the fibonacci sequence
+# Step 3: print the last occurrence in the fibonacci sequence
     print('Number of rabbits =', fib_list)
 
 if __name__ == "__main__":
