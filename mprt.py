@@ -2,21 +2,25 @@
 """
 Author: Yasmijn Balder
 
-Finds the N-glycosylation motif and gives start locations in proteins by their Uniprot ID
+Rosalind problem: mprt
+Finds the N-glycosylation motif and gives start locations in proteins by their
+Uniprot ID
 """
 
-from sys import argv
-import urllib.request
 import re
+import urllib.request
+from sys import argv
 
+
+# Functions
 def get_fasta_from_Uniprot(UniprotID):
     """Returns a list with a name and protein fasta sequence from the UniprotID
-    
+
     Keyword arguments:
-    UniprotID --- a string, the UniprotID of a protein
+    UniprotID -- a string, the UniprotID of a protein
     """
 
-    # Make sure UniprotID is a string:
+    # Make sure UniprotID is seen as a string:
     UniprotID = str(UniprotID)
 
     # Create the uniprot url
@@ -32,6 +36,7 @@ def get_fasta_from_Uniprot(UniprotID):
 
     return sequence_list
 
+
 def find_Nglycosylation_motif(protein_sequence):
     """Returns a list of positions where a motif starts in the given protein
 
@@ -45,7 +50,7 @@ def find_Nglycosylation_motif(protein_sequence):
 
     # Initiate an empty list to save the places a motif starts
     positionlist = []
-    
+
     # Make k-mers
     for aa in range(len(protein_sequence) - motiflength + 1):
         kmer = protein_sequence[aa:aa + motiflength]
@@ -54,8 +59,14 @@ def find_Nglycosylation_motif(protein_sequence):
                 positionlist.append(aa+1)
     return positionlist
 
+
 def fasta_parser(fasta_file):
-    """Bla"""
+    """Returns a list of lists. Each list represents a sequence, with the name
+    as the first item, and the sequence as the second.
+
+    Keyword arguments:
+    fasta_file -- a str in fasta format
+    """
 
     # Split the fasta file on lines
     lines = fasta_file.split('\n')
@@ -81,40 +92,43 @@ def fasta_parser(fasta_file):
                 header = line
         # If this is not a header
         else:
-            # Make sure there are no spaces and that the letters are in upper case
+            # Make upper case and remove spaces
             line = re.sub(r'\s', '', line).upper()
             # Add the line to the sequence
-            sequence+=line
+            sequence += line
     # Add the last fasta sequence to the list
     fasta.append([header, sequence])
 
     return fasta
 
+
 def main():
     """This code will be executed when called from the command line
     """
-# Step 1: assign input to variables
+
+    # Step 1: assign input to variables
     with open(argv[1]) as f:
         proteins = []
         for line in f:
             proteins.append(line.strip())
-            
-# Step 2: Run code, print and save the output
-    f = open("mprt_solution.txt", "a")
+
+    # Step 2: Run code, print and save the output
+    out = open("mprt_solution.txt", "a")
     for protein in proteins:
         sequence = get_fasta_from_Uniprot(protein)
         positions = find_Nglycosylation_motif(sequence[0][1])
         if positions != []:
             print(protein)
-            f.write(protein)
-            f.write('\n')
+            out.write(protein)
+            out.write('\n')
             print(" ".join(map(str, positions)))
 
             # Add the positions to the file
-            f.write(" ".join(map(str, positions)))
-            f.write('\n')
+            out.write(" ".join(map(str, positions)))
+            out.write('\n')
     # Close the file
-    f.close()
+    out.close()
+
 
 if __name__ == "__main__":
     main()
