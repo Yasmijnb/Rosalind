@@ -2,24 +2,25 @@
 """
 Author: Yasmijn Balder
 
-This is function returns the last occurrence of a fibonacci sequence \
-which is made using a range and a number of offspring
+Rosalind problem: fibd
+This function returns the last occurrence of a fibonacci sequence which is
+made using a range and a number of offspring
 """
 
 from sys import argv
 
+
 def fibonacci(n, m):
-    """
-    Returns an int with the number of rabbits after n months.
+    """Returns an int with the number of rabbits after n months.
 
     Keyword arguments:
-    n: a number to define the range of the sequence
-    m: a number to define the amount of months each rabbit lives
+    n -- int, a number to define the range of the sequence
+    m -- int, a number to define the amount of months each rabbit lives
     """
-    
+
     # Start with 1 rabbit that is 1 month old
     rabbits = [1]
-    
+
     # Make sure that the input is read as integers
     n = int(n)
     m = int(m)
@@ -52,21 +53,23 @@ def fibonacci(n, m):
     # Returns the number of rabbits that are alive after n months
     return len(rabbits)
 
+
 def main():
     """This code will be executed when called from the command line
     """
-# Step 1: assign input to variables
+    # Step 1: Assign input to variables
     with open(argv[1]) as f:
         for line in f:
             items = line.split()
             n = items[0]
             m = items[1]
-            
-# Step 2: make a fibonacci sequence using the variables
+
+    # Step 2: Obtain the number of alive rabbits
     fib_list = fibonacci(n, m)
-    
-# Step 3: print the last occurrence in the fibonacci sequence
+
+    # Step 3: Print the output
     print('Number of rabbits =', fib_list)
+
 
 if __name__ == "__main__":
     main()
