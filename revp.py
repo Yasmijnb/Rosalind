@@ -75,11 +75,17 @@ def reverse_complement(dna_sequence):
     return rev_complement
 
 
-def find_reverse_palindrome(dna_sequnence):
-    """Returns"""
+def find_reverse_palindrome(dna_sequence):
+    """Returns start position and length of all reverse palindromes in the
+    given dna sequence
+    
+    Keyword arguments:
+    dna_sequence
+
+    """
 
     # Make sure dna_sequence is upper case
-    dna_sequnence = dna_sequnence.upper()
+    dna_sequence = dna_sequence.upper()
 
     # Initiate a list to store the palindromes
     palindromes = []
@@ -87,9 +93,9 @@ def find_reverse_palindrome(dna_sequnence):
     # Make k-mers from 4 to 12 nucleotides
     for length in range(4, 13, 2):
         # Go through all start positions
-        for nucleotide in range(len(dna_sequnence) - length + 1):
+        for nucleotide in range(len(dna_sequence) - length + 1):
             # Make a kmer of the given length
-            kmer = dna_sequnence[nucleotide: nucleotide + length]
+            kmer = dna_sequence[nucleotide: nucleotide + length]
             # Save the first half of the kmer
             first = kmer[0:int(length / 2)]
             # Obtain the reverse complement of the last half of the kmer
