@@ -58,6 +58,10 @@ def explore(edgelist, node, visited, current_component, ccnum):
             if visited[(edge[1]-1)] == False:
                 # Explore the connected node
                 explore(edgelist, edge[1], visited, current_component, ccnum)
+        # Also look at the opposite order of edge nodes
+        if edge[1] == node:
+            if visited[(edge[0]-1)] == False:
+                explore(edgelist, edge[0], visited, current_component, ccnum)
 
 def main():
     """This code will be executed when called from the command line
@@ -77,7 +81,6 @@ def main():
     number_of_cc = depth_first_search(edgelist, nodes)
 
     # Step 3: Print the total number of components
-    #print(number_of_cc)
     print(max(number_of_cc))
 
 if __name__ == "__main__":
