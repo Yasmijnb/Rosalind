@@ -24,7 +24,7 @@ def depth_first_search(edgelist, nodes):
     # Make a list for if each node has been visited yet
     visited = [False] * nodes
     # Go by each node
-    for node in range(1, nodes):
+    for node in range(1, (nodes + 1)):
         # Go only by nodes that have not been visited yet
         if visited[(node - 1)] == False:
             # Increase the number of components
@@ -77,10 +77,8 @@ def main():
     number_of_cc = depth_first_search(edgelist, nodes)
 
     # Step 3: Print the total number of components
+    #print(number_of_cc)
     print(max(number_of_cc))
-
-
-
 
 if __name__ == "__main__":
     main()
