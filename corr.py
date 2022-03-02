@@ -78,13 +78,19 @@ def correct_single_errors(sequence_list):
         else:
             # Find a sequence with a hamming distance of 1
             for other_seq in sequence_list:
+                # Find the reverse complement of the other sequence
+                other_revcom = reverse_complement(other_seq)
                 if hamming_distance(seq, other_seq) == 1:
-                    correct_sequences.append(other_seq)
-                    break
+                    # Make sure the match is a correct sequence
+                    if sequence_list.count(other_seq) > 1 or sequence_list.count(other_revcom) > 0:
+                        correct_sequences.append(other_seq)
+                        break
             # Find a rev com sequence with a hamming distance of 1
                 elif hamming_distance(revcom, other_seq) == 1:
-                    correct_sequences.append(reverse_complement(other_seq))
-                    break
+                    # Make sure the match is a correct sequence
+                    if sequence_list.count(other_seq) > 1 or sequence_list.count(other_revcom) > 0:
+                        correct_sequences.append(other_revcom)
+                        break
 
     return correct_sequences
 
