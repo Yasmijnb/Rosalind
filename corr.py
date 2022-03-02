@@ -135,7 +135,7 @@ def format_error_corrections(old_seqlist, new_seqlist):
 
     for seq in range(len(old_seqlist)):
         if old_seqlist[seq] != new_seqlist[seq]:
-            print(old_seqlist[seq], '->', new_seqlist[seq])
+            print(old_seqlist[seq], '->', new_seqlist[seq], sep='')
 
 def main():
     """This code will be executed when called from the command line
