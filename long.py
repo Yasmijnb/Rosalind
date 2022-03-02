@@ -62,29 +62,37 @@ def shortest_superstring(sequences):
     """
 
     # Start the superstring with the first of the sequences
-    superstring = [sequences[0]]
+    superstring = sequences[0]
 
     # Go through all the other sequences
     for seq in sequences[1:]:
         # Go through all possible overlap lengths
-        for length in range(len(seq) + 1, 0, -1):
+        for length in range(len(seq), 0, -1):
+            # If the sequence is contained in the superstring, break
+            if length == len(seq):
+                if seq in superstring:
+                    break
             # Find an overlap with the end of the new sequence
             kmer = seq[len(seq) - length:]
             # Find an overlap with the start of the superstring
             if superstring[:len(kmer)] == kmer:
                 # Update the superstring to contain this sequence
+                superstring = seq[:len(seq)-len(kmer)] + superstring
+                break
             # Find an overlap with the start of the new sequence
             kmer = seq[0:length]
             # Find an overlap with the end of the superstring
             if superstring[len(superstring)-len(kmer):] == kmer:
                 # Update the superstring to contain this sequence
+                superstring = superstring + seq[len(kmer):]
+                break
 
     return superstring
 
 def main():
     """This code will be executed when called from the command line
     """
-    
+
     # Step 1: Assign input to variables
     with open(argv[1]) as input_file:
         contents = input_file.read()
