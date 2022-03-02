@@ -4,7 +4,7 @@ Author: Yasmijn Balder
 
 Rosalind problem: long
 This function returns the shortest superstring containing all given strings
-(thus corresponding to a reconstructed chromosome).
+(thus corresponding to a reconstructed chromosome/contig).
 """
 
 from sys import argv
@@ -64,10 +64,13 @@ def shortest_superstring(sequences):
     # Start the superstring with the first of the sequences
     superstring = sequences[0]
 
+    # Create an empty list to store unused sequences
+    unused_sequences = []
+
     # Go through all the other sequences
     for seq in sequences[1:]:
         # Go through all possible overlap lengths
-        for length in range(len(seq), 0, -1):
+        for length in range(len(seq), len(seq)//2 - 1, -1):
             # If the sequence is contained in the superstring, break
             if length == len(seq):
                 if seq in superstring:
@@ -86,6 +89,17 @@ def shortest_superstring(sequences):
                 # Update the superstring to contain this sequence
                 superstring = superstring + seq[len(kmer):]
                 break
+        # Find the sequences that were not added to the superstring
+        else:
+            # Append sequence to the end of the sequences list to try later
+            unused_sequences.append(seq)
+
+    # If there were unused sequences
+    if unused_sequences:
+        # Make the superstring the first sequence
+        unused_sequences = [superstring] + unused_sequences
+        # Run the function again with the unused sequences
+        superstring = shortest_superstring(unused_sequences)
 
     return superstring
 
