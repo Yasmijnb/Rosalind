@@ -9,7 +9,6 @@ translated from ORFs.
 
 from sys import argv
 import re
-from threading import currentThread
 
 def fasta_parser(fasta_file):
     """Returns a list of lists. Each list represents a sequence, with the name
@@ -88,31 +87,37 @@ def find_open_reading_frames(dna_sequence):
     stop_codons = ['TAA', 'TAG', 'TGA']
 
     # Find the three reading frames in the forward rna sequence
-    for startbase in range(0,len(dna_sequence) - 2):
-        codon = dna_sequence[startbase:startbase + 3]
-        if codon == start_codon:
-            current_orf = codon
-        elif codon in stop_codons and current_orf:
-            # Add this orf to the orfs list
-            orfs.append(current_orf)
-            # Restart the orf by emptying the current orf list
-            current_orf = ''
-        elif current_orf:
-            current_orf += codon
+    for frame in range(0,3):
+        for startbase in range(0,len(dna_sequence) - 2 - frame, 3):
+            codon = dna_sequence[startbase + frame:startbase + frame + 3]
+            if codon == start_codon:
+                current_orf += codon
+            elif codon in stop_codons and current_orf:
+                # Add this orf to the orfs list
+                orfs.append(current_orf)
+                # Restart the orf by emptying the current orf string
+                current_orf = ''
+            elif current_orf:
+                current_orf += codon
+        # Restart the orf by emptying the current orf string
+        current_orf = ''
 
     revcomp = reverse_complement(dna_sequence)
     # Find the three reading frames in the reverse complement
-    for startbase in range(0,len(dna_sequence) - 2):
-        codon = dna_sequence[startbase:startbase + 3]
-        if codon == start_codon:
-            current_orf = codon
-        elif codon in stop_codons and current_orf:
-            # Add this orf to the orfs list
-            orfs.append(current_orf)
-            # Restart the orf by emptying the current orf list
-            current_orf = ''
-        elif current_orf:
-            current_orf += codon
+    for frame in range(0,3):
+        for startbase in range(0,len(revcomp) - 2 - frame, 3):
+            codon = revcomp[startbase + frame:startbase + frame + 3]
+            if codon == start_codon:
+                current_orf = codon
+            elif codon in stop_codons and current_orf:
+                # Add this orf to the orfs list
+                orfs.append(current_orf)
+                # Restart the orf by emptying the current orf string
+                current_orf = ''
+            elif current_orf:
+                current_orf += codon
+        # Restart the orf by emptying the current orf string
+        current_orf = ''
 
     return orfs
 
@@ -172,22 +177,22 @@ def main():
     with open(argv[1]) as input_file:
         contents = input_file.read()
 
-    # Step 2: Parse the fasta sequences
+    # Step 2: Parse the fasta sequence
     name_seq_list = fasta_parser(contents)
     # obtain only the sequence
     sequence = [item[1] for item in name_seq_list][0]
 
-    print(sequence)
-
     # Step 3: Find the ORFs
     orfs = find_open_reading_frames(sequence)
-    print(orfs)
 
     # Step 4: Translate the ORFs to proteins
+    proteins = []
     for orf in orfs:
-        print(orf)
         rna = transcripe_dna(orf)
-        print(translate_rna(rna))
+        proteins.append(translate_rna(rna))
+
+    # Step 5: Print the results
+    print("\n".join(map(str, set(proteins))))
 
 if __name__ == "__main__":
     main()
