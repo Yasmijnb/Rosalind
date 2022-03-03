@@ -93,8 +93,13 @@ def find_open_reading_frames(dna_sequence):
             if codon == start_codon:
                 current_orf += codon
             elif codon in stop_codons and current_orf:
-                # Add this orf to the orfs list
-                orfs.append(current_orf)
+                # Find if this orf contains more orfs
+                m_codon = [pos for pos, char in enumerate(current_orf) if current_orf[pos:pos+3] == 'ATG']
+                # Add each orf to the orf list
+                for each in m_codon:
+                    # Make sure it is the correct reading frame
+                    if each == 0 or each % 3 == 0:
+                        orfs.append(current_orf[each:])
                 # Restart the orf by emptying the current orf string
                 current_orf = ''
             elif current_orf:
@@ -108,10 +113,15 @@ def find_open_reading_frames(dna_sequence):
         for startbase in range(0,len(revcomp) - 2 - frame, 3):
             codon = revcomp[startbase + frame:startbase + frame + 3]
             if codon == start_codon:
-                current_orf = codon
+                current_orf += codon
             elif codon in stop_codons and current_orf:
-                # Add this orf to the orfs list
-                orfs.append(current_orf)
+                # Find if this orf contains more orfs
+                m_codon = [pos for pos, char in enumerate(current_orf) if current_orf[pos:pos+3] == 'ATG']
+                # Add each orf to the orf list
+                for each in m_codon:
+                    # Make sure it is the correct reading frame
+                    if each == 0 or each % 3 == 0:
+                        orfs.append(current_orf[each:])
                 # Restart the orf by emptying the current orf string
                 current_orf = ''
             elif current_orf:
