@@ -2,20 +2,20 @@
 """
 Author: Yasmijn Balder
 Rosalind problem: gbk
-Returns the number of Nucleotide Genbank entries for a given genus within two
+Returns the number of GenBank entries for a given genus within two
 dates.
 """
 
 from sys import argv
 from Bio import Entrez
 
-def CountGenbankEntries(genus, database, species='', start='', end=''):
+def count_ncbi_entries(genus, database, species='', start='', end=''):
     """Returns the number of entries in the genbank database given the genus
     and optional other specifications
 
     Keyword arguments:
     genus -- string, specifying the genus
-    database -- database to search in
+    database -- string, database to search in (default = pubmed, nucleotide)
     species -- string, optional, specifying the species
     start -- string, optional, to find entries published after this date
     end -- string, optional, to find entries published before this date
@@ -47,7 +47,7 @@ def main():
                 end_date = line.strip()
 
     # Step 2: Obtain the number of occurences in the GenBank database
-    occurences = CountGenbankEntries(genus, 'nucleotide', start=start_date, end=end_date)
+    occurences = count_ncbi_entries(genus, 'nucleotide', start=start_date, end=end_date)
 
 
     # Step 3: Print the total number of entries
